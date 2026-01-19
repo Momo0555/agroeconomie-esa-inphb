@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agroéconomie - INP-HB Côte d'Ivoire</title>
+    
+    <!-- CDN pour les polices et icônes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Fichiers locaux -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Script pour Excel (XLSX) -->
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+</head>
+<body>
+    <!-- Bouton retour en haut -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="login-container">
+            <h2>Connexion Administrateur</h2>
+            <p>Veuillez entrer vos identifiants pour accéder aux options de suppression</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="adminUsername">Nom d'utilisateur</label>
+                    <input type="text" id="adminUsername" class="form-control" placeholder="Entrez votre nom d'utilisateur" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="adminPassword">Mot de passe</label>
+                    <input type="password" id="adminPassword" class="form-control" placeholder="Entrez votre mot de passe" required>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%; justify-content: center; margin-top: 20px;">
+                    <i class="fas fa-sign-in-alt"></i> Se connecter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Settings Modal -->
+    <div class="modal" id="adminSettingsModal">
+        <div class="admin-settings-container">
+            <h3><i class="fas fa-cog"></i> Paramètres Administrateur</h3>
+            
+            <form id="adminSettingsForm">
+                <div class="form-group">
+                    <label for="newAdminUsername">Nouveau nom d'utilisateur</label>
+                    <input type="text" id="newAdminUsername" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="newAdminPassword">Nouveau mot de passe</label>
+                    <input type="password" id="newAdminPassword" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmAdminPassword">Confirmer le mot de passe</label>
+                    <input type="password" id="confirmAdminPassword" class="form-control" required>
+                </div>
+                
+                <button type="submit" class="cta-button" style="width: 100%; justify-content: center; margin-top: 20px;">
+                    <i class="fas fa-save"></i> Enregistrer les modifications
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-container">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-seedling"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Agroéconomie</h1>
+                        <p>INP-HB Yamoussoukro, Côte d'Ivoire</p>
+                    </div>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <nav id="mainNav">
+                    <ul class="nav-links">
+                        <li><a href="#accueil" class="active"><i class="fas fa-home"></i> Accueil</a></li>
+                        <li><a href="#bibliotheque"><i class="fas fa-book"></i> Bibliothèque</a></li>
+                        <li><a href="#annuaire"><i class="fas fa-users"></i> Annuaire</a></li>
+                        <li><a href="#ajouter-document" id="addDocBtn"><i class="fas fa-plus-circle"></i> Ajouter Document</a></li>
+                        <li><a href="#ajouter-etudiant" id="addStudentBtn"><i class="fas fa-user-plus"></i> Ajouter Étudiant</a></li>
+                    </ul>
+                    
+                    <button class="admin-login-btn" id="adminLoginBtn">
+                        <i class="fas fa-user-shield"></i> Administration
+                    </button>
+                    
+                    <div class="admin-status" id="adminStatus" style="display: none;">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Administrateur</span>
+                        <button class="logout-btn" id="logoutBtn">Déconnexion</button>
+                        <button class="admin-login-btn" id="adminSettingsBtn" style="background: var(--accent-color);">
+                            <i class="fas fa-cog"></i> Paramètres
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="accueil">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Filière Agroéconomie</h2>
+                <p>École Supérieure d'Agronomie de l'INP-HB, Côte d'Ivoire</p>
+                <p>Plateforme de ressources pédagogiques et annuaire des promotions</p>
+                <a href="#bibliotheque" class="cta-button"><i class="fas fa-arrow-right"></i> Explorer la Bibliothèque</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section À propos améliorée -->
+    <section class="about-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Notre Institution</h2>
+                <p>Découvrez l'excellence académique qui forge les leaders de demain en agroéconomie</p>
+            </div>
+            
+            <div class="institution-cards">
+                <div class="institution-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <h3>INP-HB</h3>
+                        <p>Institut National Polytechnique Félix Houphouët-Boigny</p>
+                    </div>
+                    <div class="card-body">
+                        <p>L'INP-HB est un établissement public d'enseignement supérieur et de recherche de référence en Côte d'Ivoire, situé à Yamoussoukro, la capitale politique. Fondé en 1996, l'institut forme des ingénieurs et cadres de haut niveau dans divers domaines techniques et agricoles.</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i> Excellence académique et recherche innovante</li>
+                            <li><i class="fas fa-check-circle"></i> Infrastructure moderne et équipements de pointe</li>
+                            <li><i class="fas fa-check-circle"></i> Partenariats nationaux et internationaux</li>
+                            <li><i class="fas fa-check-circle"></i> Formation adaptée aux besoins du marché</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="institution-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>École Supérieure d'Agronomie</h3>
+                        <p>Formation d'excellence en sciences agronomiques</p>
+                    </div>
+                    <div class="card-body">
+                        <p>L'École Supérieure d'Agronomie (ESA) de l'INP-HB est l'une des écoles les plus prestigieuses de l'institut. Elle forme des ingénieurs agronomes compétents, capables de contribuer au développement agricole durable de la Côte d'Ivoire et de l'Afrique.</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i> Programme académique rigoureux et pratique</li>
+                            <li><i class="fas fa-check-circle"></i> Corps professoral hautement qualifié</li>
+                            <li><i class="fas fa-check-circle"></i> Stages professionnels en entreprises agricoles</li>
+                            <li><i class="fas fa-check-circle"></i> Recherche appliquée aux défis agricoles contemporains</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="institution-card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>Spécialité Agroéconomie</h3>
+                        <p>Expertise en économie des systèmes agricoles</p>
+                    </div>
+                    <div class="card-body">
+                        <p>La filière Agroéconomie forme des ingénieurs spécialisés dans l'analyse économique des systèmes agricoles. Les diplômés sont capables d'évaluer la rentabilité des exploitations, d'analyser les marchés agricoles, de concevoir des politiques de développement rural et de gérer des projets agricoles.</p>
+                        <ul class="card-features">
+                            <li><i class="fas fa-check-circle"></i> Analyse économique des exploitations agricoles</li>
+                            <li><i class="fas fa-check-circle"></i> Étude de marché et commercialisation des produits</li>
+                            <li><i class="fas fa-check-circle"></i> Gestion et évaluation de projets agricoles</li>
+                            <li><i class="fas fa-check-circle"></i> Politiques de développement rural durable</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bibliothèque Section -->
+    <section id="bibliotheque">
+        <div class="container">
+            <div class="section-title">
+                <h2>Bibliothèque Agroéconomie</h2>
+                <p>Accédez à l'ensemble des mémoires, documents, cours et livres de la filière</p>
+            </div>
+            
+            <div class="library-header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Rechercher un document...">
+                </div>
+                
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all"><i class="fas fa-layer-group"></i> Tous</button>
+                    <button class="filter-btn" data-filter="memoire"><i class="fas fa-graduation-cap"></i> Mémoires</button>
+                    <button class="filter-btn" data-filter="cours"><i class="fas fa-book-open"></i> Cours</button>
+                    <button class="filter-btn" data-filter="livre"><i class="fas fa-book"></i> Livres</button>
+                    <button class="filter-btn" data-filter="document"><i class="fas fa-file-pdf"></i> Documents</button>
+                </div>
+            </div>
+            
+            <div class="documents-grid" id="documentsGrid">
+                <!-- Documents will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Annuaire Section -->
+    <section id="annuaire">
+        <div class="container">
+            <div class="section-title">
+                <h2>Annuaire des Promotions</h2>
+                <p>Retrouvez tous les étudiants et anciens de la filière Agroéconomie</p>
+            </div>
+            
+            <div class="annuaire-header">
+                <div class="promo-filter-container">
+                    <select class="promo-select" id="promoSelect">
+                        <option value="all">Toutes les promotions</option>
+                        <!-- Promotion options will be loaded here dynamically -->
+                    </select>
+                    
+                    <button class="export-excel-btn" id="exportExcelBtn" style="display: none;">
+                        <i class="fas fa-file-excel"></i> Exporter Excel
+                    </button>
+                </div>
+            </div>
+            
+            <div class="students-grid" id="studentsGrid">
+                <!-- Students will be loaded here dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal pour ajouter un document -->
+    <div class="modal" id="addDocumentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Ajouter un nouveau document</h3>
+                <button class="close-modal" id="closeDocumentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addDocumentForm">
+                    <div class="form-group">
+                        <label for="docTitle">Titre du document *</label>
+                        <input type="text" id="docTitle" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="docAuthor">Auteur</label>
+                            <input type="text" id="docAuthor" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="docYear">Année</label>
+                            <input type="number" id="docYear" class="form-control" min="2000" max="2030" value="2024">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="docType">Type de document *</label>
+                        <select id="docType" class="form-control" required>
+                            <option value="memoire">Mémoire</option>
+                            <option value="cours">Cours</option>
+                            <option value="livre">Livre</option>
+                            <option value="document">Document</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="docDescription">Description</label>
+                        <textarea id="docDescription" class="form-control" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Fichier du document *</label>
+                        <div class="file-upload-container" id="documentUploadContainer">
+                            <input type="file" id="documentFile" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png" required>
+                            <label for="documentFile" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Cliquez pour sélectionner un fichier</span>
+                                <small>Formats acceptés: PDF, DOC, DOCX, PPT, PPTX, TXT, JPG, PNG (max 10MB)</small>
+                            </label>
+                            <div class="file-preview" id="documentPreview">
+                                <div class="file-info" id="fileInfo"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%; justify-content: center;">
+                        <i class="fas fa-plus-circle"></i> Ajouter le document
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal pour ajouter un étudiant -->
+    <div class="modal" id="addStudentModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-user-plus"></i> Ajouter un étudiant à l'annuaire</h3>
+                <button class="close-modal" id="closeStudentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addStudentForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentLastName">Nom *</label>
+                            <input type="text" id="studentLastName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentFirstName">Prénom *</label>
+                            <input type="text" id="studentFirstName" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentPromo">Promotion *</label>
+                            <select id="studentPromo" class="form-control" required>
+                                <!-- Promotion options will be loaded here dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentEmail">Email *</label>
+                            <input type="email" id="studentEmail" class="form-control" placeholder="exemple@email.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentPhone">Téléphone</label>
+                            <input type="text" id="studentPhone" class="form-control" placeholder="+225 XX XX XX XX">
+                        </div>
+                        <div class="form-group">
+                            <label for="studentWhatsApp">WhatsApp</label>
+                            <input type="text" id="studentWhatsApp" class="form-control" placeholder="+225 XX XX XX XX">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentPosition">Poste actuel</label>
+                        <input type="text" id="studentPosition" class="form-control" placeholder="Ex: Ingénieur agroéconomiste">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentCompany">Entreprise/Organisation</label>
+                        <input type="text" id="studentCompany" class="form-control" placeholder="Ex: Ministère de l'Agriculture">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Photo de profil</label>
+                        <div class="file-upload-container" id="photoUploadContainer">
+                            <input type="file" id="studentPhoto" accept="image/*">
+                            <label for="studentPhoto" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Cliquez pour sélectionner une photo</span>
+                                <small>Formats acceptés: JPG, PNG, GIF (max 5MB)</small>
+                            </label>
+                            <div class="file-preview" id="photoPreview">
+                                <img id="previewImage" src="" alt="Aperçu">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="studentPresident">
+                        <label for="studentPresident">Président de promotion</label>
+                    </div>
+                    
+                    <button type="submit" class="cta-button" style="width: 100%; justify-content: center;">
+                        <i class="fas fa-user-plus"></i> Ajouter l'étudiant
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Agroéconomie INP-HB</h3>
+                    <p>Plateforme officielle de la filière Agroéconomie de l'École Supérieure d'Agronomie de l'INP-HB, Côte d'Ivoire.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h4>Liens rapides</h4>
+                    <ul>
+                        <li><a href="#accueil"><i class="fas fa-chevron-right"></i> Accueil</a></li>
+                        <li><a href="#bibliotheque"><i class="fas fa-chevron-right"></i> Bibliothèque</a></li>
+                        <li><a href="#annuaire"><i class="fas fa-chevron-right"></i> Annuaire</a></li>
+                        <li><a href="#ajouter-document" id="footerAddDocBtn"><i class="fas fa-chevron-right"></i> Ajouter un document</a></li>
+                        <li><a href="#ajouter-etudiant" id="footerAddStudentBtn"><i class="fas fa-chevron-right"></i> Ajouter un étudiant</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-contact">
+                    <h4>Contact</h4>
+                    <p><i class="fas fa-map-marker-alt"></i> INP-HB, Yamoussoukro, Côte d'Ivoire</p>
+                    <p><i class="fas fa-phone"></i> +225 27 30 64 00 00</p>
+                    <p><i class="fas fa-envelope"></i> agroeconomie@inphb.ci</p>
+                    <p><i class="fas fa-globe"></i> www.inphb.ci</p>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; <span id="currentYear"></span> Filière Agroéconomie - INP-HB Côte d'Ivoire. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Fichier JavaScript local -->
+    <script src="script.js"></script>
+</body>
+</html>
