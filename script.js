@@ -5,8 +5,8 @@ const initialDocuments = [
         title: "Analyse économique des systèmes de production agricole",
         author: "Dr. Koffi N'Guessan",
         year: 2024,
-        type: "cours",
-        description: "Cours complet sur l'analyse économique des systèmes de production agricole en Côte d'Ivoire",
+        type: "livre",
+        description: "Livre complet sur l'analyse économique des systèmes de production agricole en Côte d'Ivoire",
         image: "https://images.unsplash.com/photo-1586771107445-d3ca888129fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
         fileName: "analyse-economique-systemes-production.pdf",
         fileSize: "2.4 MB",
@@ -56,11 +56,39 @@ const initialStudents = [
     }
 ];
 
+// Liste des cours avec noms corrigés
+const courses = [
+    { id: 1, name: "THÉORIES AVANCÉES DES ORGANISATIONS" },
+    { id: 2, name: "THÉORIES DU COMMERCE INTERNATIONAL" },
+    { id: 3, name: "ÉCONOMIE DE L'ENVIRONNEMENT ET DES RESSOURCES NATURELLES" },
+    { id: 4, name: "MANAGEMENT DE LA QUALITÉ (ISO 9000, 22000, 17025, 14000, 26000, ETC.)" },
+    { id: 5, name: "MARKETING FONDAMENTAL (GESTION DE LA MARQUE, QUALITÉ, DURABLE, RELATIONNEL)" },
+    { id: 6, name: "MANAGEMENT DU RISQUE ET DU CHANGEMENT" },
+    { id: 7, name: "DROIT ET RÉGLEMENTATION DES AFFAIRES (DROIT DE LA PROPRIÉTÉ INTELLECTUELLE)" },
+    { id: 8, name: "SUIVI ET ÉVALUATION DES PROJETS DE DÉVELOPPEMENT" },
+    { id: 9, name: "NÉGOCE DES MATIÈRES PREMIÈRES AGRICOLES ET DÉRIVÉS" },
+    { id: 10, name: "POLITIQUES PUBLIQUES (AGRICULTURE, ALIMENTAIRE, AGROINDUSTRIES, COMMERCE)" },
+    { id: 11, name: "ÉCONOMIE ET MANAGEMENT DE L'INNOVATION 1, DESIGN THINKING" },
+    { id: 12, name: "ÉCONOMIE AGRO-INDUSTRIELLE ET SYSTÈME ALIMENTAIRE" },
+    { id: 13, name: "FINANCEMENT DE L'AGRICULTURE (STRUCTURE, PORTAGE DE STOCK, REFINANCEMENT)" },
+    { id: 14, name: "GOUVERNANCE ET ANALYSE DES CHAÎNES DE VALEUR" },
+    { id: 15, name: "ANALYSE DES SÉRIES TEMPORELLES ET DES DONNÉES DE PANEL" },
+    { id: 16, name: "ÉCONOMÉTRIE DES DONNÉES QUALITATIVES (LOGIT, PROBIT, TOBIT)" },
+    { id: 17, name: "ANALYSE DU CYCLE DE VIE ACV (FILIÈRE, ENTREPRISES ET PROJETS)" },
+    { id: 18, name: "ÉVALUATION ÉCONOMIQUE DES POLITIQUES PUBLIQUES (MESURE D'IMPACTS)" },
+    { id: 19, name: "ANGLAIS PROFESSIONNEL" },
+    { id: 20, name: "SOCIOLOGIE ET CULTURE D'ENTREPRISE" },
+    { id: 21, name: "MÉTHODOLOGIE DE RECHERCHE ET DE RÉDACTION SCIENTIFIQUE" },
+    { id: 22, name: "SÉMINAIRES DE CONTROVERSE (CONFÉRENCES, DÉBATS)" }
+];
+
 // Variables globales
 let documents = JSON.parse(localStorage.getItem('agroeco-documents')) || initialDocuments;
 let students = JSON.parse(localStorage.getItem('agroeco-students')) || initialStudents;
+let courseFiles = JSON.parse(localStorage.getItem('agroeco-course-files')) || [];
 let currentDocumentFilter = 'all';
 let currentPromoFilter = 'all';
+let selectedCourseId = null;
 let isAdmin = localStorage.getItem('agroeco-admin') === 'true';
 const currentYear = new Date().getFullYear();
 
@@ -73,7 +101,6 @@ let adminCredentials = JSON.parse(localStorage.getItem('agroeco-admin-credential
 // Images par défaut pour les documents
 const defaultDocumentImages = {
     'memoire': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
-    'cours': 'https://images.unsplash.com/photo-1586771107445-d3ca888129fc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     'livre': 'https://images.unsplash.com/photo-1544716278-e513176f20b5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80',
     'document': 'https://images.unsplash.com/photo-1580584126903-c17d41830450?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80'
 };
@@ -96,6 +123,7 @@ function resetAddDocumentForm() {
     document.getElementById('documentPreview').style.display = 'none';
     document.getElementById('fileInfo').innerHTML = '';
     document.getElementById('docYear').value = currentYear;
+    document.getElementById('docType').value = 'memoire';
 }
 
 function resetAddStudentForm() {
@@ -114,12 +142,27 @@ function resetAdminSettingsForm() {
     document.getElementById('newAdminUsername').value = adminCredentials.username;
 }
 
+function resetAddFileToCourseForm() {
+    document.getElementById('addFileToCourseForm').reset();
+    document.getElementById('courseFilePreview').style.display = 'none';
+    document.getElementById('courseFileInfo').innerHTML = '';
+    document.getElementById('fileYear').value = currentYear;
+    document.querySelectorAll('.file-type-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.getAttribute('data-type') === 'cours') {
+            btn.classList.add('active');
+        }
+    });
+    document.getElementById('fileType').value = 'cours';
+}
+
 // Mapping des fonctions de réinitialisation pour chaque modale
 const modalResetFunctions = {
     'addDocumentModal': resetAddDocumentForm,
     'addStudentModal': resetAddStudentForm,
     'loginModal': resetLoginForm,
-    'adminSettingsModal': resetAdminSettingsForm
+    'adminSettingsModal': resetAdminSettingsForm,
+    'addFileToCourseModal': resetAddFileToCourseForm
 };
 
 // Initialisation de l'application
@@ -131,6 +174,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!localStorage.getItem('agroeco-students')) {
         localStorage.setItem('agroeco-students', JSON.stringify(students));
+    }
+    
+    // Initialiser les fichiers de cours s'ils n'existent pas
+    if (!localStorage.getItem('agroeco-course-files')) {
+        localStorage.setItem('agroeco-course-files', JSON.stringify(courseFiles));
     }
     
     // Initialiser les identifiants admin s'ils n'existent pas
@@ -152,6 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
     loadDocuments();
     loadPromoSelect();
     loadStudents();
+    loadCoursesList();
+    updateCourseStats();
     
     // Gestionnaire d'événements pour le menu mobile
     document.getElementById('mobileMenuBtn').addEventListener('click', function() {
@@ -246,17 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
         openModal('addDocumentModal');
     });
     
-    document.getElementById('footerAddDocBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        openModal('addDocumentModal');
-    });
-    
     document.getElementById('addStudentBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        openModal('addStudentModal');
-    });
-    
-    document.getElementById('footerAddStudentBtn').addEventListener('click', function(e) {
         e.preventDefault();
         openModal('addStudentModal');
     });
@@ -302,6 +342,48 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             reader.readAsDataURL(file);
         }
+    });
+    
+    // Gestionnaire pour le bouton d'ajout de fichier au cours
+    document.getElementById('addFileToCourseBtn').addEventListener('click', function() {
+        if (selectedCourseId) {
+            openModal('addFileToCourseModal');
+        }
+    });
+    
+    // Gestionnaire pour la prévisualisation de fichier dans la modale cours
+    document.getElementById('courseFile').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const fileInfo = document.getElementById('courseFileInfo');
+            const fileSize = (file.size / (1024*1024)).toFixed(2);
+            fileInfo.innerHTML = `
+                <strong>Fichier sélectionné:</strong><br>
+                ${file.name}<br>
+                <small>Taille: ${fileSize} MB</small>
+            `;
+            document.getElementById('courseFilePreview').style.display = 'block';
+        }
+    });
+    
+    // Gestionnaire pour les boutons de type de fichier
+    document.querySelectorAll('.file-type-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('.file-type-btn').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            document.getElementById('fileType').value = this.getAttribute('data-type');
+        });
+    });
+    
+    // Gestionnaire pour le formulaire d'ajout de fichier au cours
+    document.getElementById('addFileToCourseForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        addFileToCourse();
+    });
+    
+    // Gestionnaire pour fermer la modale d'ajout de fichier
+    document.getElementById('closeFileToCourseModal').addEventListener('click', function() {
+        closeModal('addFileToCourseModal');
     });
     
     // Fermer le menu mobile lorsqu'on clique sur un lien
@@ -375,9 +457,13 @@ function showAdminUI() {
     document.getElementById('adminLoginBtn').style.display = 'none';
     document.getElementById('adminStatus').style.display = 'flex';
     document.getElementById('exportExcelBtn').style.display = 'flex';
+    document.getElementById('addFileToCourseBtn').style.display = 'flex';
     // Les boutons de suppression seront visibles lors du chargement des données
     loadDocuments();
     loadStudents();
+    if (selectedCourseId) {
+        loadCourseFiles(selectedCourseId);
+    }
 }
 
 // Fonction pour masquer l'interface administrateur
@@ -385,9 +471,13 @@ function hideAdminUI() {
     document.getElementById('adminStatus').style.display = 'none';
     document.getElementById('exportExcelBtn').style.display = 'none';
     document.getElementById('adminLoginBtn').style.display = 'flex';
+    document.getElementById('addFileToCourseBtn').style.display = 'none';
     // Recharger les données pour masquer les boutons de suppression
     loadDocuments();
     loadStudents();
+    if (selectedCourseId) {
+        loadCourseFiles(selectedCourseId);
+    }
 }
 
 // Fonction pour charger les documents
@@ -418,7 +508,6 @@ function loadDocuments() {
     filteredDocuments.forEach(doc => {
         const typeLabels = {
             'memoire': 'Mémoire',
-            'cours': 'Cours',
             'livre': 'Livre',
             'document': 'Document'
         };
@@ -543,6 +632,137 @@ function loadStudents() {
     });
     
     studentsGrid.innerHTML = studentsHTML;
+}
+
+// Fonction pour charger la liste des cours
+function loadCoursesList() {
+    const coursList = document.getElementById('coursList');
+    let html = '';
+    
+    courses.forEach(course => {
+        const courseFileCount = courseFiles.filter(f => f.courseId === course.id).length;
+        
+        html += `
+        <div class="cours-item" data-course-id="${course.id}">
+            <div class="cours-number">${course.id}</div>
+            <div class="cours-title">${course.name}</div>
+        </div>
+        `;
+    });
+    
+    coursList.innerHTML = html;
+    
+    // Ajouter les événements de clic sur les cours
+    document.querySelectorAll('.cours-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const courseId = parseInt(this.getAttribute('data-course-id'));
+            selectCourse(courseId);
+        });
+    });
+}
+
+// Fonction pour sélectionner un cours
+function selectCourse(courseId) {
+    selectedCourseId = courseId;
+    
+    // Mettre à jour l'apparence des cours
+    document.querySelectorAll('.cours-item').forEach(item => {
+        item.classList.remove('active');
+        if (parseInt(item.getAttribute('data-course-id')) === courseId) {
+            item.classList.add('active');
+        }
+    });
+    
+    // Mettre à jour le titre du cours sélectionné
+    const course = courses.find(c => c.id === courseId);
+    document.getElementById('coursSelectedTitle').textContent = `${course.id}. ${course.name}`;
+    
+    // Afficher le bouton d'ajout de fichier
+    document.getElementById('addFileToCourseBtn').style.display = 'flex';
+    
+    // Mettre à jour la description
+    document.getElementById('coursDescription').innerHTML = `
+        <p><strong>Description:</strong> Cours de la filière Agroéconomie. Cliquez sur le bouton "Ajouter un fichier" pour contribuer à l'enrichissement des ressources pédagogiques de ce cours.</p>
+    `;
+    
+    // Charger les fichiers du cours
+    loadCourseFiles(courseId);
+}
+
+// Fonction pour charger les fichiers d'un cours
+function loadCourseFiles(courseId) {
+    const filesGrid = document.getElementById('coursFilesGrid');
+    const courseFilesList = courseFiles.filter(f => f.courseId === courseId);
+    
+    if (courseFilesList.length === 0) {
+        filesGrid.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-folder-open"></i>
+                <p>Aucun fichier disponible pour ce cours</p>
+                <p class="small-text">Soyez le premier à ajouter un fichier!</p>
+            </div>
+        `;
+        return;
+    }
+    
+    let html = '';
+    
+    courseFilesList.forEach(file => {
+        const fileTypeIcons = {
+            'cours': 'fas fa-book-open',
+            'td': 'fas fa-edit',
+            'tp': 'fas fa-flask',
+            'examen': 'fas fa-file-alt',
+            'corrige': 'fas fa-check-circle',
+            'autre': 'fas fa-file'
+        };
+        
+        const fileTypeLabels = {
+            'cours': 'Cours',
+            'td': 'TD',
+            'tp': 'TP',
+            'examen': 'Examen',
+            'corrige': 'Corrigé',
+            'autre': 'Autre'
+        };
+        
+        html += `
+        <div class="file-card" data-file-id="${file.id}">
+            <div class="file-header">
+                <div class="file-icon">
+                    <i class="${fileTypeIcons[file.type] || 'fas fa-file'}"></i>
+                </div>
+                <div class="file-info">
+                    <h5>${file.title}</h5>
+                    <div class="file-meta">
+                        <span><i class="fas fa-user"></i> ${file.author}</span> | 
+                        <span><i class="fas fa-calendar"></i> ${file.year}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="file-body">
+                <p class="file-description">${file.description || 'Aucune description'}</p>
+                <div class="file-meta" style="margin-top: 10px; margin-bottom: 15px;">
+                    <span class="file-type-badge">${fileTypeLabels[file.type]}</span> | 
+                    <span><i class="fas fa-database"></i> ${file.fileSize}</span>
+                </div>
+                <div class="file-actions">
+                    <button class="file-action-btn download" onclick="downloadCourseFile(${file.id})">
+                        <i class="fas fa-download"></i> Télécharger
+                    </button>
+                    ${isAdmin ? `
+                    <button class="file-action-btn delete" onclick="deleteCourseFile(${file.id})">
+                        <i class="fas fa-trash"></i> Supprimer
+                    </button>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+        `;
+    });
+    
+    filesGrid.innerHTML = html;
+    updateCourseStats();
 }
 
 // Fonction pour ajouter un nouveau document
@@ -687,6 +907,92 @@ function addNewStudent() {
     }
 }
 
+// Fonction pour ajouter un fichier à un cours
+function addFileToCourse() {
+    if (!selectedCourseId) {
+        alert('Veuillez d\'abord sélectionner un cours.');
+        return;
+    }
+    
+    const title = document.getElementById('fileTitle').value;
+    const description = document.getElementById('fileDescription').value;
+    const author = document.getElementById('fileAuthor').value || "Anonyme";
+    const year = parseInt(document.getElementById('fileYear').value);
+    const type = document.getElementById('fileType').value;
+    const fileInput = document.getElementById('courseFile');
+    
+    if (!fileInput.files || !fileInput.files[0]) {
+        alert('Veuillez sélectionner un fichier à uploader.');
+        return;
+    }
+    
+    const file = fileInput.files[0];
+    
+    // Vérifier la taille du fichier (max 20MB)
+    if (file.size > 20 * 1024 * 1024) {
+        alert('Le fichier est trop volumineux. La taille maximale est de 20MB.');
+        return;
+    }
+    
+    const fileName = file.name;
+    const fileSize = (file.size / (1024*1024)).toFixed(2) + ' MB';
+    const fileType = file.type;
+    
+    // Convertir le fichier en base64
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64Data = e.target.result.split(',')[1];
+        
+        // Créer un nouvel ID
+        const newId = courseFiles.length > 0 ? Math.max(...courseFiles.map(f => f.id)) + 1 : 1;
+        
+        // Créer le nouvel objet fichier
+        const newFile = {
+            id: newId,
+            courseId: selectedCourseId,
+            title: title,
+            author: author,
+            year: year,
+            type: type,
+            description: description || "",
+            fileData: base64Data,
+            fileName: fileName,
+            fileSize: fileSize,
+            fileType: fileType,
+            uploadDate: new Date().toISOString().split('T')[0]
+        };
+        
+        // Ajouter le fichier au tableau
+        courseFiles.push(newFile);
+        
+        // Mettre à jour le localStorage
+        localStorage.setItem('agroeco-course-files', JSON.stringify(courseFiles));
+        
+        // Recharger les fichiers du cours
+        loadCourseFiles(selectedCourseId);
+        
+        // Fermer la modale et réinitialiser le formulaire
+        closeModal('addFileToCourseModal');
+        document.getElementById('addFileToCourseForm').reset();
+        document.getElementById('courseFilePreview').style.display = 'none';
+        document.getElementById('courseFileInfo').innerHTML = '';
+        
+        // Réinitialiser les boutons de type
+        document.querySelectorAll('.file-type-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-type') === 'cours') {
+                btn.classList.add('active');
+            }
+        });
+        document.getElementById('fileType').value = 'cours';
+        
+        // Afficher un message de confirmation
+        alert('Fichier ajouté au cours avec succès!');
+    };
+    
+    reader.readAsDataURL(file);
+}
+
 // Fonction pour supprimer un document
 function deleteDocument(id) {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) {
@@ -719,6 +1025,16 @@ function deleteStudent(id) {
         
         // Afficher un message de confirmation
         alert('Étudiant supprimé avec succès!');
+    }
+}
+
+// Fonction pour supprimer un fichier de cours
+function deleteCourseFile(fileId) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
+        courseFiles = courseFiles.filter(f => f.id !== fileId);
+        localStorage.setItem('agroeco-course-files', JSON.stringify(courseFiles));
+        loadCourseFiles(selectedCourseId);
+        alert('Fichier supprimé avec succès!');
     }
 }
 
@@ -801,6 +1117,30 @@ function downloadDocument(id) {
     }
 }
 
+// Fonction pour télécharger un fichier de cours
+function downloadCourseFile(fileId) {
+    const file = courseFiles.find(f => f.id === fileId);
+    
+    if (!file.fileData) {
+        alert('Ce fichier n\'est pas disponible.');
+        return;
+    }
+    
+    try {
+        const link = document.createElement('a');
+        link.href = `data:${file.fileType};base64,${file.fileData}`;
+        link.download = file.fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        alert(`Téléchargement du fichier "${file.title}" lancé!`);
+    } catch (error) {
+        console.error('Erreur lors du téléchargement:', error);
+        alert('Erreur lors du téléchargement du fichier.');
+    }
+}
+
 // Fonction pour exporter les étudiants en Excel
 function exportStudentsToExcel() {
     // Préparer les données pour Excel
@@ -827,6 +1167,17 @@ function exportStudentsToExcel() {
     XLSX.writeFile(workbook, fileName);
     
     alert(`Fichier Excel "${fileName}" téléchargé avec succès!`);
+}
+
+// Fonction pour mettre à jour les statistiques des cours
+function updateCourseStats() {
+    const totalFiles = courseFiles.length;
+    const lastUpdate = courseFiles.length > 0 
+        ? courseFiles.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate))[0].uploadDate
+        : '--/--/----';
+    
+    document.getElementById('totalFichiersCours').textContent = totalFiles;
+    document.getElementById('derniereMajCours').textContent = lastUpdate;
 }
 
 // Fonction pour ouvrir une modale

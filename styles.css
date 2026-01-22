@@ -262,6 +262,27 @@ nav {
     box-shadow: 0 12px 20px rgba(26, 95, 122, 0.4);
 }
 
+.cta-button-small {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--gradient-blue);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: var(--transition);
+    border: none;
+    cursor: pointer;
+}
+
+.cta-button-small:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(26, 95, 122, 0.3);
+}
+
 /* Section À propos améliorée */
 .about-section {
     padding: 100px 0;
@@ -386,6 +407,326 @@ section {
     line-height: 1.8;
 }
 
+/* Cours Section */
+.cours-container {
+    display: flex;
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.cours-sidebar {
+    flex: 0 0 300px;
+}
+
+.cours-content {
+    flex: 1;
+    background: white;
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: var(--shadow);
+}
+
+.cours-list {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.cours-item {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cours-item:last-child {
+    border-bottom: none;
+}
+
+.cours-item:hover {
+    background-color: rgba(26, 95, 122, 0.05);
+}
+
+.cours-item.active {
+    background: var(--gradient-blue);
+    color: white;
+}
+
+.cours-item.active .cours-number {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.cours-item.active .cours-title {
+    color: white;
+}
+
+.cours-number {
+    width: 36px;
+    height: 36px;
+    background: rgba(26, 95, 122, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.cours-title {
+    font-weight: 600;
+    color: var(--dark-color);
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.cours-stats {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: var(--shadow);
+}
+
+.cours-stats h4 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stats-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #f0f0f0;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.95rem;
+}
+
+.stat-value {
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.cours-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.cours-header h3 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
+.cours-description {
+    margin-bottom: 30px;
+    padding: 20px;
+    background: rgba(26, 95, 122, 0.05);
+    border-radius: 10px;
+    color: #555;
+    line-height: 1.6;
+}
+
+.cours-files-container h4 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.file-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: var(--transition);
+    border: 1px solid #f0f0f0;
+}
+
+.file-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.file-header {
+    padding: 20px;
+    background: rgba(26, 95, 122, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.file-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--gradient-blue);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.file-info h5 {
+    margin-bottom: 5px;
+    color: var(--dark-color);
+    font-size: 1rem;
+}
+
+.file-meta {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.file-body {
+    padding: 15px 20px;
+}
+
+.file-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.file-action-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: var(--transition);
+}
+
+.file-action-btn.view {
+    background: rgba(26, 95, 122, 0.1);
+    color: var(--primary-color);
+}
+
+.file-action-btn.download {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.file-action-btn.delete {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.file-action-btn:hover {
+    transform: translateY(-2px);
+}
+
+.file-action-btn.view:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.file-action-btn.download:hover {
+    background: #28a745;
+    color: white;
+}
+
+.file-action-btn.delete:hover {
+    background: #dc3545;
+    color: white;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    color: #ddd;
+}
+
+/* Modal pour ajouter un fichier à un cours */
+#addFileToCourseModal .form-group {
+    margin-bottom: 20px;
+}
+
+.file-type-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.file-type-btn {
+    padding: 12px;
+    background: white;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #555;
+}
+
+.file-type-btn:hover {
+    border-color: var(--primary-color);
+    background: rgba(26, 95, 122, 0.05);
+}
+
+.file-type-btn.active {
+    background: var(--gradient-blue);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.file-type-btn i {
+    font-size: 1.5rem;
+}
+
 /* Bibliothèque Section améliorée */
 .library-header {
     display: flex;
@@ -400,6 +741,7 @@ section {
     display: flex;
     gap: 15px;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .search-box {
@@ -952,6 +1294,22 @@ section {
     text-align: left;
 }
 
+/* Admin Settings Modal */
+.admin-settings-container {
+    background: white;
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.admin-settings-container h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 /* Footer amélioré */
 footer {
     background-color: var(--dark-color);
@@ -1094,22 +1452,6 @@ footer {
     box-shadow: 0 8px 16px rgba(26, 95, 122, 0.4);
 }
 
-/* Admin Settings Modal */
-.admin-settings-container {
-    background: white;
-    border-radius: 15px;
-    padding: 40px;
-    max-width: 500px;
-    margin: 0 auto;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
-
-.admin-settings-container h3 {
-    color: var(--primary-color);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
 /* Responsive Design amélioré */
 @media (max-width: 1100px) {
     .nav-links {
@@ -1143,6 +1485,19 @@ footer {
     .institution-cards {
         grid-template-columns: 1fr;
     }
+    
+    .cours-container {
+        flex-direction: column;
+    }
+    
+    .cours-sidebar {
+        flex: none;
+        width: 100%;
+    }
+    
+    .files-grid {
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
 }
 
 @media (max-width: 868px) {
@@ -1159,6 +1514,16 @@ footer {
     
     .search-box {
         min-width: 100%;
+    }
+    
+    .library-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .promo-filter-container {
+        width: 100%;
+        justify-content: space-between;
     }
 }
 
@@ -1246,6 +1611,24 @@ footer {
     
     .btn-delete {
         flex: 1 0 100%;
+    }
+    
+    .cours-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .cours-header h3 {
+        font-size: 1.5rem;
+    }
+    
+    .files-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .file-type-buttons {
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .back-to-top {
